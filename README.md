@@ -3,7 +3,7 @@
 Automate your Twitch match predictions, relieving most of the burden from your moderators.
 
 ## Installation (manual)
-Assuming [Bepinex Mono](https://docs.bepinex.dev/master/articles/user_guide/installation/unity_mono.html) is already installed, Unzip the release in `STRAFTAT/Bepinex/Plugins`
+Assuming [Bepinex Mono](https://docs.bepinex.dev/master/articles/user_guide/installation/unity_mono.html) is already installed, drag the release files into `STRAFTAT/Bepinex/Plugins`
 
 ## Usage
 Note: You will need a twitch account that is able to do predicts (Affiliate, Partner, etc.)
