@@ -44,11 +44,11 @@ public class TwitchPredictionsClient
         return PredictionsCoroutineHost.Ensure();
     }
 
-    public Coroutine CreatePrediction(List<TwitchPredictionOutcomeSpec> outcomes)
+    public Coroutine CreatePrediction(List<TwitchPredictionOutcomeSpec> outcomes, int? predictionWindowOverrideSeconds = null)
     {
         if (host == null)
             host = EnsureHost();
-        return host.StartCoroutine(CreatePredictionCoroutine(outcomes));
+        return host.StartCoroutine(CreatePredictionCoroutine(outcomes, predictionWindowOverrideSeconds));
     }
 
     public Coroutine CancelPrediction()
@@ -65,7 +65,7 @@ public class TwitchPredictionsClient
         return host.StartCoroutine(ResolvePredictionCoroutine(winningTeamId));
     }
 
-    private IEnumerator CreatePredictionCoroutine(List<TwitchPredictionOutcomeSpec> outcomes)
+    private IEnumerator CreatePredictionCoroutine(List<TwitchPredictionOutcomeSpec> outcomes, int? predictionWindowOverrideSeconds)
     {
         if (!EnsureReady())
             yield break;
@@ -81,12 +81,15 @@ public class TwitchPredictionsClient
             .ToArray();
         Plugin.LogInfo($"Twitch prediction outcomes count: {outcomeRequests.Length}", true, "gray");
 
+        var windowSeconds = predictionWindowOverrideSeconds.HasValue && predictionWindowOverrideSeconds.Value > 0
+            ? predictionWindowOverrideSeconds.Value
+            : predictionWindowSeconds;
         var requestBody = new TwitchPredictionCreateRequest
         {
             broadcaster_id = broadcasterId,
             title = predictionTitle,
             outcomes = outcomeRequests,
-            prediction_window = predictionWindowSeconds
+            prediction_window = windowSeconds
         };
 
         var json = JsonConvert.SerializeObject(requestBody);

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using BepInEx;
@@ -7,7 +6,6 @@ using BepInEx.Logging;
 using ComputerysModdingUtilities;
 using HarmonyLib;
 using UnityEngine;
-using TMPro;
 
 
 [assembly: StraftatMod(true)]
@@ -22,8 +20,7 @@ public class Plugin : BaseUnityPlugin
     public static bool IsPredictionStarted;
     public static TwitchPredictionsClient PredictionsClient;
 
-    public const int PredictionWindowSeconds = 120;
-    public const string PredictionTitle = "Match Winner";
+    public const string PredictionTitle = "STRAFTAT Match Winner";
 
     public static void LogInfo(string message, bool writeOffline = false, string color = "white")
     {
@@ -57,7 +54,7 @@ public class Plugin : BaseUnityPlugin
             TwitchOAuthClient.Ensure(Logger, () => IsPredictionStarted),
             Logger,
             string.Empty,
-            PredictionWindowSeconds,
+            120,
             PredictionTitle);
     }
 
@@ -105,7 +102,11 @@ public class Plugin : BaseUnityPlugin
                     LogWarning("Prediction requires at least 2 outcomes. Skipping prediction.", true);
                     return;
                 }
-                PredictionsClient.CreatePrediction(orderedOutcomes);
+                var playerCount = teamsById.Values.Sum(x => x.Count);
+                var roundsToWin = ScoreManager.Instance != null ? ScoreManager.Instance.RoundScoreRequiredToWin : 2;
+                var predictionWindowSeconds = 60 + (15 * playerCount * roundsToWin);
+                predictionWindowSeconds = Mathf.Clamp(predictionWindowSeconds, 60, 1800);
+                PredictionsClient.CreatePrediction(orderedOutcomes, predictionWindowSeconds);
 
                 IsPredictionStarted = true;
             }
