@@ -18,7 +18,7 @@ Another Note: This mod hasnt been tested with MoreStrafts or edge cases where pl
 
 ## Building
 
-To build you will require a `VoiceRedirect/VoiceRedirect/libs` folder with the following assemblies from the game (`PEAK/PEAK_Data/Managed`) with `PEAK` being the game root folder
+To build you will require a `straftat_twitch_autopoll/straftat_twitch_autopoll/libs` folder with the following assemblies from the game (`STRAFTAT/STRAFTAT_Data/Managed`) with `STRAFTAT` being the game root folder
 - `Assembly-CSharp.dll`
 - `ComputerysModdingUtilites.dll`
 - `FishNet.Runtime.dll`
